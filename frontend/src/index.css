@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Colors ── */
+  --color-surface: #faf4ff;
+  --color-surface-container-low: #f5eeff;
+  --color-surface-container-high: #e8deff;
+  --color-surface-container-highest: #e2d7ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-on-surface: #32294f;
+  --color-on-surface-variant: #5f557f;
+  --color-primary: #4a40e0;
+  --color-primary-container: #9795ff;
+  --color-on-primary: #f4f1ff;
+  --color-secondary: #702ae1;
+  --color-secondary-container: #dcc9ff;
+  --color-tertiary-container: #fd8bca;
+  --color-on-tertiary-container: #ffffff;
+  --color-outline-variant: #b2a6d5;
+
+  /* Dark hero colors */
+  --color-hero-dark: #0d0b2e;
+  --color-hero-dark-lighter: #1a1640;
+
+  /* Accent green for CTA */
+  --color-accent-green: #2dd4a8;
+  --color-accent-green-hover: #26b893;
+
+  /* ── Fonts ── */
+  --font-display: "Plus Jakarta Sans", sans-serif;
+  --font-body: "Inter", sans-serif;
+
+  /* ── Shadows ── */
+  --shadow-ambient: 0 8px 32px rgba(50, 41, 79, 0.06);
+
+  /* ── Animations ── */
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-delayed: float 6s ease-in-out 3s infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+}
+
+/* ── Base Layer ── */
+@layer base {
+  body {
+    font-family: var(--font-body);
+    color: var(--color-on-surface);
+    background-color: var(--color-surface);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    color: var(--color-on-surface);
+  }
+}
+
+/* ── Custom Utility Classes ── */
+@utility glass {
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@utility ghost-border {
+  border: 1px solid rgba(178, 166, 213, 0.15);
+}
+
+@utility gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-container));
+}
+
+@utility gradient-secondary {
+  background: linear-gradient(135deg, var(--color-secondary), var(--color-tertiary-container));
+}
