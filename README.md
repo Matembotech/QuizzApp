@@ -349,14 +349,14 @@ npm run build
 
 ## 🖼️ Screenshots
 
-| Page                 | Preview                                                    |
-| -------------------- | ---------------------------------------------------------- |
-| Home Page            | ![Home Page](./screenshots/home.png)                       |
-| Quiz Interface       | ![Quiz Interface](./screenshots/quiz.png)                  |
-| Results Page         | ![Results Page](./screenshots/results.png)                 |
-| Admin Dashboard      | ![Admin Dashboard](./screenshots/admin-dashboard.png)      |
-| Modules Management   | ![Modules Management](./screenshots/admin-modules.png)     |
-| Questions Management | ![Questions Management](./screenshots/admin-questions.png) |
+| Page                 | Preview                                               |
+| -------------------- | ----------------------------------------------------- |
+| Home Page            | ![Home Page](./assets/homepage.png)                   |
+| Quiz Interface       | ![Quiz Interface](./assets/quiz.png)                  |
+| Results Page         | ![Results Page](./assets/results.png)                 |
+| Admin Dashboard      | ![Admin Dashboard](./assets/admin-dashboard.png)      |
+| Modules Management   | ![Modules Management](./assets/admin-modules.png)     |
+| Questions Management | ![Questions Management](./assets/admin-questions.png) |
 
 > 📸 Screenshots will be added as development progresses.
 
