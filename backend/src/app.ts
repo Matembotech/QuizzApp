@@ -18,6 +18,7 @@ import {
   errorHandler,
   notFoundHandler,
 } from "./middleware/index.js";
+import { authLimiter, generalLimiter } from "./middleware/rateLimiters.js";
 
 // ============================================
 // EXPRESS APPLICATION SETUP
@@ -51,25 +52,25 @@ app.get("/api/health", (req, res) => {
 });
 
 // Authentication routes (public - no auth required)
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", authLimiter, authRoutes);
 
 // Module routes (GET public, others require auth + admin)
-app.use("/api/modules", moduleRoutes);
+app.use("/api/modules", generalLimiter, moduleRoutes);
 
 // Question routes (GET public, others require auth + admin)
-app.use("/api/questions", questionRoutes);
+app.use("/api/questions", generalLimiter, questionRoutes);
 
 // Result routes (POST requires auth, GET may be filtered by userId)
-app.use("/api/results", resultRoutes);
+app.use("/api/results", generalLimiter, resultRoutes);
 
 // User management routes (Admin only - requires auth + admin)
-app.use("/api/users", userRoutes);
+app.use("/api/users", generalLimiter, userRoutes);
 
 // Contact routes (POST requires auth, GET may be filtered by userId)
-app.use("/api/contact", contactRoutes);
+app.use("/api/contact", generalLimiter, contactRoutes);
 
 // Subscription routes (GET public, others require auth + admin)
-app.use("/api/subscribe", subscribeRoutes);
+app.use("/api/subscribe", generalLimiter, subscribeRoutes);
 
 // ============================================
 // ERROR & 404 HANDLERS

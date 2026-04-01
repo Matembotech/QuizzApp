@@ -28,6 +28,15 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [isRateLimited, setIsRateLimited] = useState(false);
+  const [rateLimitCountdown, setRateLimitCountdown] = useState<number>(15 * 60); // 15 minutes in seconds
+
+  // Helper to format countdown as MM:SS
+  const formatCountdown = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
 
   /**
    * INITIALIZE REACT HOOK FORM
@@ -56,6 +65,26 @@ const Login = () => {
   }, [location.state, location.pathname, navigate]);
 
   /**
+   * RATE LIMIT COUNTDOWN EFFECT
+   * Handles the countdown timer when rate limited
+   */
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (isRateLimited && rateLimitCountdown > 0) {
+      interval = setInterval(() => {
+        setRateLimitCountdown((prev) => {
+          if (prev <= 1) {
+            setIsRateLimited(false);
+            return 15 * 60;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isRateLimited, rateLimitCountdown]);
+
+  /**
    * FORM SUBMISSION HANDLER
    * Called only if the frontend validation passes.
    */
@@ -66,10 +95,17 @@ const Login = () => {
       // Navigate to dashboard/home after successful login
       navigate("/");
     } catch (err: any) {
-      setLocalError(
-        err.response?.data?.message ||
-          "Login failed. Please check your credentials.",
-      );
+      // Check if this is a rate limit error (429)
+      if ((err as any).isRateLimit) {
+        setIsRateLimited(true);
+        setRateLimitCountdown(15 * 60); // Reset countdown to 15 minutes
+        setLocalError(null); // Clear any other errors
+      } else {
+        setLocalError(
+          err.response?.data?.message ||
+            "Login failed. Please check your credentials.",
+        );
+      }
     }
   };
 
@@ -141,7 +177,20 @@ const Login = () => {
               </div>
             )}
 
-            {(authError || localError) && (
+            {/* Rate Limit Error */}
+            {isRateLimited && (
+              <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
+                <p className="text-red-500 text-sm text-center font-bold mb-2">
+                  ⚠️ Too many login attempts
+                </p>
+                <p className="text-red-500/80 text-sm text-center">
+                  Please wait <span className="font-mono font-bold text-red-400">{formatCountdown(rateLimitCountdown)}</span> before trying again.
+                </p>
+              </div>
+            )}
+
+            {/* Other Errors */}
+            {(authError || localError) && !isRateLimited && (
               <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-sm text-center font-bold animate-pulse">
                 {authError || localError}
               </div>
@@ -235,10 +284,10 @@ const Login = () => {
 
               <button
                 type="submit"
-                disabled={loading || !isValid}
-                className="w-full py-4 gradient-primary text-white rounded-xl font-bold shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100"
+                disabled={loading || !isValid || isRateLimited}
+                className="w-full py-4 gradient-primary text-white rounded-xl font-bold shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed"
               >
-                {loading ? "Signing in..." : "Sign in"}
+                {loading ? "Signing in..." : isRateLimited ? `Try again in ${formatCountdown(rateLimitCountdown)}` : "Sign in"}
               </button>
             </form>
 
