@@ -4,8 +4,8 @@ import {
   getModuleById,
   createModule,
   deleteModule,
-} from "../controllers/ModuleController";
-import { authMiddleware, adminMiddleware } from "../middleware";
+} from "../controllers/ModuleController.js";
+import { authMiddleware, adminMiddleware } from "../middleware/index.js";
 
 const router = Router();
 

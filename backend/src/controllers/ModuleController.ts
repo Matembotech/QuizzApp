@@ -1,7 +1,7 @@
 // Module Controller
 // Handles CRUD operations for academic modules/courses
-import { Request, Response } from "express";
-import { Module } from "../models";
+import type { Request, Response } from "express";
+import { Module } from "../models/index.js";
 
 /**
  * GET /api/modules

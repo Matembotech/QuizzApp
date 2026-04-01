@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-import express, { Application } from "express";
+import express, { type Application } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
@@ -12,8 +12,12 @@ import {
   userRoutes,
   subscribeRoutes,
   contactRoutes,
-} from "./routes";
-import { authMiddleware, errorHandler, notFoundHandler } from "./middleware";
+} from "./routes/index.js";
+import {
+  authMiddleware,
+  errorHandler,
+  notFoundHandler,
+} from "./middleware/index.js";
 
 // ============================================
 // EXPRESS APPLICATION SETUP

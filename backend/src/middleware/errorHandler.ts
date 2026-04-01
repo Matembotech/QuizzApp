@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from "express";
 
 // Extended error interface for our app
 export interface AppError extends Error {
@@ -16,27 +16,27 @@ export const errorHandler = (
   err: AppError | Error,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
   let statusCode: number = 500;
-  let message: string = 'Internal server error';
+  let message: string = "Internal server error";
 
   // If error has statusCode and message from our controllers
   if (err instanceof Error) {
     // Mongoose validation error
-    if (err.name === 'ValidationError') {
+    if (err.name === "ValidationError") {
       statusCode = 400;
-      message = 'Validation error';
+      message = "Validation error";
     }
     // Mongoose duplicate key error
-    else if (err.name === 'MongoServerError' && (err as any).code === 11000) {
+    else if (err.name === "MongoServerError" && (err as any).code === 11000) {
       statusCode = 409;
-      message = 'Duplicate field value';
+      message = "Duplicate field value";
     }
     // Cast error (invalid ObjectId)
-    else if (err.name === 'CastError') {
+    else if (err.name === "CastError") {
       statusCode = 400;
-      message = 'Invalid ID format';
+      message = "Invalid ID format";
     }
     // Custom error with status code
     else if ((err as AppError).statusCode) {
@@ -45,13 +45,13 @@ export const errorHandler = (
     }
     // Default error
     else {
-      message = err.message || 'Internal server error';
+      message = err.message || "Internal server error";
     }
   }
 
   // Log error in development
-  if (process.env.NODE_ENV === 'development') {
-    console.error('Error:', {
+  if (process.env.NODE_ENV === "development") {
+    console.error("Error:", {
       statusCode,
       message,
       stack: err.stack,
@@ -60,7 +60,9 @@ export const errorHandler = (
     });
   } else {
     // Minimal logging in production
-    console.error(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl} - ${statusCode}: ${message}`);
+    console.error(
+      `[${new Date().toISOString()}] ${req.method} ${req.originalUrl} - ${statusCode}: ${message}`,
+    );
   }
 
   // Send error response
@@ -68,7 +70,7 @@ export const errorHandler = (
     success: false,
     message,
     // Only send stack trace in development
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+    ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
   });
 };
 

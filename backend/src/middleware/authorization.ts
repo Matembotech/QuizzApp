@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from "express";
 
-import { User } from '../models';
+import { User } from "../models";
 
 // Extend Express Request type
 declare global {
@@ -25,7 +25,7 @@ declare global {
 export const isOwner = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const { userId } = req.params;
@@ -35,7 +35,7 @@ export const isOwner = async (
     if (!user) {
       res.status(401).json({
         success: false,
-        message: 'Authentication required',
+        message: "Authentication required",
       });
       return;
     }
@@ -46,17 +46,17 @@ export const isOwner = async (
       // TODO: Add admin check: if (req.user && (await User.findById(req.user.userId))?.isAdmin) { next(); }
       res.status(403).json({
         success: false,
-        message: 'You can only access your own results',
+        message: "You can only access your own results",
       });
       return;
     }
 
     next();
   } catch (error: any) {
-    console.error('IsOwner middleware error:', error);
+    console.error("IsOwner middleware error:", error);
     res.status(500).json({
       success: false,
-      message: 'Authorization error',
+      message: "Authorization error",
       error: error.message,
     });
   }

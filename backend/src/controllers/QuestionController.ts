@@ -1,8 +1,8 @@
 // Question Controller
 // Handles CRUD operations for quiz questions
 // Includes validation to ensure correct answers exist in options
-import { Request, Response } from "express";
-import { Question } from "../models";
+import type { Request, Response } from "express";
+import { Question } from "../models/index.js";
 import mongoose from "mongoose";
 
 /**

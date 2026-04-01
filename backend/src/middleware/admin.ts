@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
-import { User } from '../models';
+import type { Request, Response, NextFunction } from "express";
+import { User } from "../models/index.js";
 
 // Extend Express Request type to include user info (already in auth.ts)
 declare global {
@@ -24,14 +24,14 @@ declare global {
 export const adminMiddleware = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     // Ensure user is authenticated (authMiddleware should have run first)
     if (!req.user) {
       res.status(401).json({
         success: false,
-        message: 'Authentication required',
+        message: "Authentication required",
       });
       return;
     }
@@ -42,7 +42,7 @@ export const adminMiddleware = async (
     if (!user) {
       res.status(404).json({
         success: false,
-        message: 'User not found',
+        message: "User not found",
       });
       return;
     }
@@ -51,7 +51,7 @@ export const adminMiddleware = async (
     if (!user.isAdmin) {
       res.status(403).json({
         success: false,
-        message: 'Admin access required',
+        message: "Admin access required",
       });
       return;
     }
@@ -59,10 +59,10 @@ export const adminMiddleware = async (
     // User is admin, proceed to next middleware/route handler
     next();
   } catch (error: any) {
-    console.error('Admin middleware error:', error);
+    console.error("Admin middleware error:", error);
     res.status(500).json({
       success: false,
-      message: 'Authorization error',
+      message: "Authorization error",
       error: error.message,
     });
   }

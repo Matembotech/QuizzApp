@@ -1,6 +1,7 @@
 {
   "name": "quiz-backend",
   "version": "1.0.0",
+  "type": "module",
   "description": "Backend API for Quiz Application",
   "main": "dist/server.js",
   "scripts": {
@@ -40,6 +41,6 @@
     "@typescript-eslint/parser": "^7.13.1",
     "eslint": "^8.57.0",
     "tsx": "^4.19.0",
-    "typescript": "^5.6.3"
+    "typescript": "^5.9.3"
   }
 }

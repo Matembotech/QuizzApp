@@ -1,7 +1,7 @@
 // Result Controller
 // Handles quiz result submission and retrieval
-import { Request, Response } from 'express';
-import { Result, Question } from '../models';
+import type { Request, Response } from "express";
+import { Result, Question } from "../models/index.js";
 
 /**
  * POST /api/submit-quiz
@@ -17,7 +17,10 @@ import { Result, Question } from '../models';
  * - Calculate score (count of correct questions)
  * - Return calculated score immediately
  */
-export const submitQuiz = async (req: Request, res: Response): Promise<void> => {
+export const submitQuiz = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   try {
     const { userId, answers } = req.body;
 
@@ -25,7 +28,7 @@ export const submitQuiz = async (req: Request, res: Response): Promise<void> => 
     if (!userId || !answers) {
       res.status(400).json({
         success: false,
-        message: 'Please provide userId and answers array',
+        message: "Please provide userId and answers array",
       });
       return;
     }
@@ -33,7 +36,7 @@ export const submitQuiz = async (req: Request, res: Response): Promise<void> => 
     if (!Array.isArray(answers) || answers.length === 0) {
       res.status(400).json({
         success: false,
-        message: 'Answers must be a non-empty array',
+        message: "Answers must be a non-empty array",
       });
       return;
     }
@@ -49,7 +52,7 @@ export const submitQuiz = async (req: Request, res: Response): Promise<void> => 
       if (!questionId || !selected) {
         res.status(400).json({
           success: false,
-          message: 'Each answer must have questionId and selected array',
+          message: "Each answer must have questionId and selected array",
           invalidAnswer: answer,
         });
         return;
@@ -58,14 +61,15 @@ export const submitQuiz = async (req: Request, res: Response): Promise<void> => 
       if (!Array.isArray(selected)) {
         res.status(400).json({
           success: false,
-          message: 'Selected answers must be an array',
+          message: "Selected answers must be an array",
           invalidAnswer: answer,
         });
         return;
       }
 
       // Fetch question from database
-      const question = await Question.findById(questionId).select('correctAnswers');
+      const question =
+        await Question.findById(questionId).select("correctAnswers");
 
       if (!question) {
         res.status(404).json({
@@ -112,7 +116,7 @@ export const submitQuiz = async (req: Request, res: Response): Promise<void> => 
     // Return the result with calculated score AND detailed breakdown
     res.status(201).json({
       success: true,
-      message: 'Quiz submitted and scored successfully',
+      message: "Quiz submitted and scored successfully",
       data: {
         result,
         summary: {
@@ -125,10 +129,10 @@ export const submitQuiz = async (req: Request, res: Response): Promise<void> => 
       },
     });
   } catch (error: any) {
-    console.error('Submit quiz error:', error);
+    console.error("Submit quiz error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to submit quiz',
+      message: "Failed to submit quiz",
       error: error.message,
     });
   }
@@ -139,7 +143,10 @@ export const submitQuiz = async (req: Request, res: Response): Promise<void> => 
  * Get all results for a specific user (or all if admin)
  * Query params: ?userId=xxx (optional - if not provided, returns all results)
  */
-export const getResults = async (req: Request, res: Response): Promise<void> => {
+export const getResults = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   try {
     const { userId } = req.query;
 
@@ -150,7 +157,7 @@ export const getResults = async (req: Request, res: Response): Promise<void> => 
 
     const results = await Result.find(query)
       .sort({ date: -1 }) // Most recent first
-      .populate('userId', 'name email'); // Get user details
+      .populate("userId", "name email"); // Get user details
 
     res.status(200).json({
       success: true,
@@ -158,10 +165,10 @@ export const getResults = async (req: Request, res: Response): Promise<void> => 
       data: results,
     });
   } catch (error: any) {
-    console.error('Get results error:', error);
+    console.error("Get results error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch results',
+      message: "Failed to fetch results",
       error: error.message,
     });
   }
@@ -171,20 +178,22 @@ export const getResults = async (req: Request, res: Response): Promise<void> => 
  * GET /api/results/:userId
  * Get all results for a specific user
  */
-export const getUserResults = async (req: Request, res: Response): Promise<void> => {
+export const getUserResults = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   try {
     const { userId } = req.params;
 
     if (!userId) {
       res.status(400).json({
         success: false,
-        message: 'User ID is required',
+        message: "User ID is required",
       });
       return;
     }
 
-    const results = await Result.find({ userId })
-      .sort({ date: -1 });
+    const results = await Result.find({ userId }).sort({ date: -1 });
 
     res.status(200).json({
       success: true,
@@ -192,10 +201,10 @@ export const getUserResults = async (req: Request, res: Response): Promise<void>
       data: results,
     });
   } catch (error: any) {
-    console.error('Get user results error:', error);
+    console.error("Get user results error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch user results',
+      message: "Failed to fetch user results",
       error: error.message,
     });
   }
@@ -206,14 +215,17 @@ export const getUserResults = async (req: Request, res: Response): Promise<void>
  * Get cumulative quiz statistics for a user
  * Returns aggregates: total quizzes, total questions, total correct, best/worst score, average
  */
-export const getUserStats = async (req: Request, res: Response): Promise<void> => {
+export const getUserStats = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   try {
     const { userId } = req.params;
 
     if (!userId) {
       res.status(400).json({
         success: false,
-        message: 'User ID is required',
+        message: "User ID is required",
       });
       return;
     }
@@ -224,7 +236,7 @@ export const getUserStats = async (req: Request, res: Response): Promise<void> =
     if (results.length === 0) {
       res.status(200).json({
         success: true,
-        message: 'No quiz attempts found',
+        message: "No quiz attempts found",
         data: {
           totalQuizzes: 0,
           totalQuestions: 0,
@@ -241,12 +253,18 @@ export const getUserStats = async (req: Request, res: Response): Promise<void> =
 
     // Calculate statistics
     const totalQuizzes = results.length;
-    const totalQuestions = results.reduce((sum, r) => sum + r.totalQuestions, 0);
+    const totalQuestions = results.reduce(
+      (sum, r) => sum + r.totalQuestions,
+      0,
+    );
     const totalCorrect = results.reduce((sum, r) => sum + r.score, 0);
     const totalIncorrect = totalQuestions - totalCorrect;
-    const overallAccuracy = totalQuestions > 0 ? ((totalCorrect / totalQuestions) * 100).toFixed(2) : '0.00';
+    const overallAccuracy =
+      totalQuestions > 0
+        ? ((totalCorrect / totalQuestions) * 100).toFixed(2)
+        : "0.00";
     const averageQuizScore = (totalCorrect / totalQuizzes).toFixed(2);
-    const scores = results.map(r => r.score);
+    const scores = results.map((r) => r.score);
     const bestScore = Math.max(...scores);
     const worstScore = Math.min(...scores);
 
@@ -265,10 +283,10 @@ export const getUserStats = async (req: Request, res: Response): Promise<void> =
       },
     });
   } catch (error: any) {
-    console.error('Get user stats error:', error);
+    console.error("Get user stats error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch user statistics',
+      message: "Failed to fetch user statistics",
       error: error.message,
     });
   }

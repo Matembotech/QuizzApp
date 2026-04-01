@@ -1,8 +1,9 @@
-import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import type { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
 
 // JWT secret should match the one in AuthController
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+const JWT_SECRET =
+  process.env.JWT_SECRET || "your-secret-key-change-in-production";
 
 // Extend Express Request type to include user info
 declare global {
@@ -27,23 +28,23 @@ declare global {
 export const authMiddleware = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     // Get token from Authorization header
     // Expected format: "Bearer <token>"
-    const authHeader = req.header('Authorization');
+    const authHeader = req.header("Authorization");
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       res.status(401).json({
         success: false,
-        message: 'No token provided. Please authenticate.',
+        message: "No token provided. Please authenticate.",
       });
       return;
     }
 
     // Extract token from header
-    const token = authHeader.replace('Bearer ', '');
+    const token = authHeader.replace("Bearer ", "");
 
     // Verify token
     const decoded = jwt.verify(token, JWT_SECRET) as any;
@@ -57,26 +58,26 @@ export const authMiddleware = async (
     // Move to next middleware/route handler
     next();
   } catch (error: any) {
-    if (error.name === 'JsonWebTokenError') {
+    if (error.name === "JsonWebTokenError") {
       res.status(401).json({
         success: false,
-        message: 'Invalid token. Please login again.',
+        message: "Invalid token. Please login again.",
       });
       return;
     }
 
-    if (error.name === 'TokenExpiredError') {
+    if (error.name === "TokenExpiredError") {
       res.status(401).json({
         success: false,
-        message: 'Token expired. Please login again.',
+        message: "Token expired. Please login again.",
       });
       return;
     }
 
-    console.error('Auth middleware error:', error);
+    console.error("Auth middleware error:", error);
     res.status(500).json({
       success: false,
-      message: 'Authentication error',
+      message: "Authentication error",
       error: error.message,
     });
   }

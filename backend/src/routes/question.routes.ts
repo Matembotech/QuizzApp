@@ -5,9 +5,9 @@ import {
   createQuestion,
   updateQuestion,
   deleteQuestion,
-} from "../controllers/QuestionController";
-import { authMiddleware, adminMiddleware } from "../middleware";
-import Question from "../models/Question";
+} from "../controllers/QuestionController.js";
+import { authMiddleware, adminMiddleware } from "../middleware/index.js";
+import Question from "../models/Question.js";
 
 const router = Router();
 

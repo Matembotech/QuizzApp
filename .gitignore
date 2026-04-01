@@ -126,3 +126,4 @@ local.config.ts
 # Backup files
 *.bak
 *.backup
+files/

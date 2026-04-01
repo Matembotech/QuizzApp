@@ -1,7 +1,7 @@
 /// <reference types="node" />
-import { Router, Request, Response } from "express";
-import { supabase } from "../lib/supabase";
-import { sendWelcomeEmail } from "../lib/resend";
+import { Router, type Request, type Response } from "express";
+import { supabase } from "../lib/supabase.js";
+import { sendWelcomeEmail } from "../lib/resend.js";
 
 const router = Router();
 
@@ -16,9 +16,7 @@ router.post("/", async (req: Request, res: Response) => {
   }
 
   // Save to Supabase
-  const { error } = await supabase
-    .from("subscribers")
-    .insert({ email });
+  const { error } = await supabase.from("subscribers").insert({ email });
 
   if (error) {
     // Duplicate email

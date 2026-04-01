@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { register, login } from '../controllers/AuthController';
+import { Router } from "express";
+import { register, login } from "../controllers/AuthController.js";
 
 const router = Router();
 
@@ -7,12 +7,12 @@ const router = Router();
  * POST /api/register
  * Register a new user
  */
-router.post('/register', register);
+router.post("/register", register);
 
 /**
  * POST /api/login
  * Login user
  */
-router.post('/login', login);
+router.post("/login", login);
 
 export default router;

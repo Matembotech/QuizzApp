@@ -1,9 +1,8 @@
 import "dotenv/config";
 
-
-import http from 'http';
-import { app } from './app';
-import { connectDB, disconnectDB } from './config/database';
+import http from "http";
+import { app } from "./app.js";
+import { connectDB, disconnectDB } from "./config/database.js";
 
 // ============================================
 // ENVIRONMENT CONFIGURATION
@@ -35,10 +34,10 @@ const startServer = async (): Promise<void> => {
     // 2. Start listening for requests
     server.listen(PORT, () => {
       console.log(`🚀 Server is running on port ${PORT}`);
-      console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`📍 Environment: ${process.env.NODE_ENV || "development"}`);
     });
   } catch (error) {
-    console.error('❌ Failed to start server:', error);
+    console.error("❌ Failed to start server:", error);
     process.exit(1);
   }
 };
@@ -55,34 +54,34 @@ startServer();
  * - Close server connections
  * - Disconnect from database
  */
-process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server');
+process.on("SIGTERM", () => {
+  console.log("SIGTERM signal received: closing HTTP server");
   server.close(async () => {
     await disconnectDB();
-    console.log('HTTP server closed');
+    console.log("HTTP server closed");
   });
 });
 
-process.on('SIGINT', () => {
-  console.log('SIGINT signal received: closing HTTP server');
+process.on("SIGINT", () => {
+  console.log("SIGINT signal received: closing HTTP server");
   server.close(async () => {
     await disconnectDB();
-    console.log('HTTP server closed');
+    console.log("HTTP server closed");
     process.exit(0);
   });
 });
 
 // Handle unhandled promise rejections
-process.on('unhandledRejection', (error: Error) => {
-  console.error('Unhandled Promise Rejection:', error);
+process.on("unhandledRejection", (error: Error) => {
+  console.error("Unhandled Promise Rejection:", error);
   server.close(async () => {
     await disconnectDB();
   });
 });
 
 // Handle uncaught exceptions
-process.on('uncaughtException', (error: Error) => {
-  console.error('Uncaught Exception:', error);
+process.on("uncaughtException", (error: Error) => {
+  console.error("Uncaught Exception:", error);
   server.close(async () => {
     await disconnectDB();
   });

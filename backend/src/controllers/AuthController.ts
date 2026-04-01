@@ -1,10 +1,13 @@
 // Auth Controller
 // Handles user authentication: registration and login
 // Uses bcrypt for password hashing and JWT for authentication tokens
-import { Request, Response } from "express";
+// Auth Controller
+// Handles user authentication: registration and login
+// Uses bcrypt for password hashing and JWT for authentication tokens
+import type { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { User } from "../models";
+import { User } from "../models/index.js";
 
 // JWT secret (should be in environment variable)
 const JWT_SECRET =
