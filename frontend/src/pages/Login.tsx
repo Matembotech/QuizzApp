@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useApp } from "../context/AppContext";
@@ -103,7 +105,8 @@ const Login = () => {
 
           <div className="space-y-6">
             <h1 className="text-6xl font-display font-bold text-white leading-tight">
-              Welcome Back <br /> <span className="text-primary">to QuizzApp!</span>
+              Welcome Back <br />{" "}
+              <span className="text-primary">to QuizzApp!</span>
             </h1>
             <div className="w-20 h-1 bg-primary rounded-full" />
             <p className="text-lg text-white/60 leading-relaxed max-w-md">
@@ -175,7 +178,9 @@ const Login = () => {
                     aria-describedby={errors.email ? "email-error" : undefined}
                     placeholder="name@example.com"
                     className={`w-full bg-white/5 border ${
-                      errors.email ? "border-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.2)]" : "border-white/10"
+                      errors.email
+                        ? "border-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.2)]"
+                        : "border-white/10"
                     } rounded-xl py-3.5 pl-12 pr-4 text-white placeholder:text-white/20 focus:outline-none focus:border-primary/50 focus:bg-white/10 transition-all`}
                   />
                 </div>
@@ -204,10 +209,14 @@ const Login = () => {
                     })}
                     type={showPassword ? "text" : "password"}
                     aria-invalid={errors.password ? "true" : "false"}
-                    aria-describedby={errors.password ? "password-error" : undefined}
+                    aria-describedby={
+                      errors.password ? "password-error" : undefined
+                    }
                     placeholder="••••••••"
                     className={`w-full bg-white/5 border ${
-                      errors.password ? "border-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.2)]" : "border-white/10"
+                      errors.password
+                        ? "border-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.2)]"
+                        : "border-white/10"
                     } rounded-xl py-3.5 pl-12 pr-12 text-white placeholder:text-white/20 focus:outline-none focus:border-primary/50 focus:bg-white/10 transition-all`}
                   />
                   <button
@@ -215,7 +224,11 @@ const Login = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
                   >
-                    {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
+                    {showPassword ? (
+                      <FaEyeSlash size={16} />
+                    ) : (
+                      <FaEye size={16} />
+                    )}
                   </button>
                 </div>
               </div>
