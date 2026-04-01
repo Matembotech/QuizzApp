@@ -1,5 +1,7 @@
 # 🎓 QuizzApp — by Matembo Tech
 
+🌐 **Live App**: [https://quizz-app-eight-dun.vercel.app/](https://quizz-app-eight-dun.vercel.app/)
+
 > **Learn smarter. Test sharper. Track your progress.**
 > A premium, full-stack quiz platform built for students who deserve more than a generic experience.
 
