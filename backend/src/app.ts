@@ -37,8 +37,9 @@ app.use(helmet());
 app.use(cors({
   origin: [
     "http://localhost:5173", // Frontend development URL
-    "https://quizz-app-eight-dun.vercel.app/", // Frontend production URL
-  ]
+    "https://quizz-app-eight-dun.vercel.app", // Frontend production URL
+  ],
+  credentials: true, // Allow cookies to be sent with requests
 }));
 
 // Parse incoming JSON requests
