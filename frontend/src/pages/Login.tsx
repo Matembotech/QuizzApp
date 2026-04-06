@@ -69,7 +69,7 @@ const Login = () => {
    * Handles the countdown timer when rate limited
    */
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (isRateLimited && rateLimitCountdown > 0) {
       interval = setInterval(() => {
         setRateLimitCountdown((prev) => {
