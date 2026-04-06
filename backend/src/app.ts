@@ -34,7 +34,12 @@ export const app: Application = express();
 app.use(helmet());
 
 // Enable CORS (Cross-Origin Resource Sharing) for all routes
-app.use(cors());
+app.use(cors({
+  origin: [
+    "http://localhost:5173", // Frontend development URL
+    "https://quizz-app-eight-dun.vercel.app/", // Frontend production URL
+  ]
+}));
 
 // Parse incoming JSON requests
 app.use(express.json());

@@ -7,7 +7,7 @@ import axios from "axios";
  */
 const api = axios.create({
   baseURL:
-    import.meta.env.VITE_API_URL || "https://quizzapp-1-k5ls.onrender.com/api",
+    import.meta.env.VITE_API_URL || "https://laudable-adventure.up.railway.app/api",
   headers: {
     "Content-Type": "application/json",
   },
