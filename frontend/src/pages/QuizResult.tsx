@@ -13,9 +13,10 @@ const QuizResult = () => {
   useEffect(() => {
     if (!isAuthenticated) {
       setShowAuthModal(true);
+      return;
     }
     fetchResults();
-  }, [fetchResults, isAuthenticated, setShowAuthModal]);
+  }, []);
 
   // const quizTotal = questions?.length || 0;
   const percentage = summary?.percentage || "0";
